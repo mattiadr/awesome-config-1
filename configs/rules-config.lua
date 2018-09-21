@@ -9,6 +9,7 @@ local beautiful = require("beautiful")
 local redtitle = require("redflat.titlebar")
 
 local appnames = require("configs/alias-config")
+local tagconf = require("configs/tag-config")
 
 -- Initialize tables and vars for module
 -----------------------------------------------------------------------------------------------------------------------
@@ -23,16 +24,6 @@ rules.base_properties = {
 	screen            = awful.screen.preferred,
 	titlebars_enabled = false,
 	minimized         = false,
-	--[[
-	callback          = function(client)
-		local tag = awful.screen.focused().selected_tag
-		if tag.index == 1 or #tag:clients() > 1 then
-			tag = global_add_tag(appnames.short[client.class])
-		end
-		client:move_to_tag(tag)
-		tag:view_only()
-	end
-	]]
 }
 
 rules.floating_any = {
@@ -48,9 +39,11 @@ rules.floating_any = {
 	},
 }
 
+-- these will not trigger the creation of a new tab
 rules.minor = {
 	class = {
 		"st-256color",
+		"TelegramDesktop",
 	},
 }
 
@@ -77,7 +70,6 @@ function rules:init(args)
 			properties = {
 				tag         = "TG",
 				switchtotag = false,
-				callback    = function() end, -- used to disable default callback
 			},
 		},
 		{ -- floating
@@ -85,22 +77,19 @@ function rules:init(args)
 			properties = {
 				floating     = true,
 				placement    = awful.placement.centered,
-				border_width = self.base_properties.border_width,
-				callback     = function() end, -- used to disable default callback
-			},
-		},
-		{ -- minor apps (wont create new tag)
-			rule_any   = self.minor,
-			properties = {
-				callback     = function() end, -- used to disable default callback
+				--border_width = self.base_properties.border_width,
 			},
 		},
 	}
 
 
-	-- Set rules
+	-- Set awful rules
 	--------------------------------------------------------------------------------
 	awful.rules.rules = rules.rules
+
+	-- Set tagconf rules
+	--------------------------------------------------------------------------------
+	tagconf:set_rules_any(self.minor)
 end
 
 -- End
