@@ -302,11 +302,11 @@ theme.gauge.monitor.double = {
 -- Tag
 ------------------------------------------------------------
 theme.gauge.tag.blue = {
-	width    = 80,
-	font     = theme.cairo_fonts.tag,
-	point    = { width = 64, height = 3, gap = 27, dx = 5 },
-	text_gap = 20,
-	color    = theme.color
+	width      = 80,
+	font       = theme.cairo_fonts.tag,
+	point      = { width = 64, height = 3, gap = 27, dx = 5 },
+	text_shift = 20,
+	color      = theme.color
 }
 
 -- Task
@@ -334,8 +334,8 @@ theme.gauge.graph.dots = {
 ------------------------------------------------------------
 theme.gauge.audio.red = {
 	icon = {
-		ready = theme.path .. "/widget/audio.svg",
-		mute  = theme.path .. "/widget/mute.svg"
+		volume = theme.path .. "/widget/audio.svg",
+		mute   = theme.path .. "/widget/mute.svg"
 	},
 	color = {
 		main = theme.color.main,
