@@ -116,9 +116,17 @@ local upgrades_widget = require("user.widget.upgrades")
 
 local upgrades = {}
 upgrades.widget = upgrades_widget({
-	{ name = "pacman", check = "set -o pipefail; checkupdates | wc -l",  upgrade = "sudo pacman -Syu" },
-	{ name = "AUR",    check = "set -o pipefail; yay --aur -Qu | wc -l", upgrade = "yay --aur -Su"    },
-}, { terminal = env.terminal, show_notify = true })
+	{
+		name = "pacman",
+		check = "set -o pipefail; checkupdates | wc -l",
+		upgrade = "sudo pacman -Syu"
+	},
+	{
+		name = "AUR",
+		check = "set -o pipefail; yay --aur -Qu | wc -l",
+		upgrade = "yay --builddir=/home/mattiadr/builds --aur -Su"
+	},
+}, { terminal = env.terminal, show_notify = true, update_timeout = 0 })
 
 -- PA volume control
 --------------------------------------------------------------------------------

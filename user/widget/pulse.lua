@@ -147,6 +147,8 @@ function pulse:change_volume(args)
 		)
 	end
 
+	-- disable mute
+	awful.spawn("pacmd set-sink-mute " .. sink .. " no")
 	-- set new volume
 	awful.spawn("pacmd set-sink-volume " .. sink .. " " .. new_volume)
 	-- update volume indicators

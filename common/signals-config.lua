@@ -122,6 +122,12 @@ function signals:init(args)
 
 	-- return to opened_by tag when current is empty
 	tag.connect_signal("untagged", function(tag)
+		-- go back to default if set
+		if #tag:clients() == 0 and tag.return_default then
+			awful.tag.find_by_name(awful.screen.focused(), tag.return_default):view_only()
+			return
+		end
+
 		-- find previous non empty tag
 		-- tag                   -> needs to be non nil
 		-- tag ~= tag.opened_by  -> avoid infinite loops

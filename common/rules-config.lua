@@ -311,6 +311,7 @@ end
 function rules:tag_setup(screen)
 	-- create named tags
 	for _, v in ipairs(self.named_tags) do
+		v.lay_args.return_default = "1 TERM"
 		create_tag(v, screen)
 	end
 

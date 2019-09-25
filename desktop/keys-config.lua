@@ -151,15 +151,9 @@ local function tag_client_to_tab(client, add_new_tab, reverse)
 end
 
 -- volume functions
-local function volume_raise()
-	pulse:mute(false)
-	pulse:change_volume({ show_notify = true })
-end
+local function volume_raise() pulse:change_volume({ show_notify = true }) end
 
-local function volume_lower()
-	pulse:mute(false)
-	pulse:change_volume({ show_notify = true, down = true })
-end
+local function volume_lower() pulse:change_volume({ show_notify = true, down = true }) end
 
 local function volume_mute() pulse:mute() end
 

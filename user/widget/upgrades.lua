@@ -154,12 +154,14 @@ function upgrades.new(pacmans, args, style)
 
 	-- Set update timer
 	--------------------------------------------------------------------------------
-	local t = timer({ timeout = update_timeout })
-	t:connect_signal("timeout", object.check_all)
-	t:start()
+	if update_timeout > 0 then
+		local t = timer({ timeout = update_timeout })
+		t:connect_signal("timeout", object.check_all)
+		t:start()
+	end
 
 	if style.firstrun then
-		t:emit_signal("timeout")
+		object.check_all()
 	else
 		object.update_widget(false)
 	end
