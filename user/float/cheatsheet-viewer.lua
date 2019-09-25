@@ -16,7 +16,6 @@ local wibox = require("wibox")
 
 local redflat = require("redflat")
 local redutil = require("redflat.util")
-local separator = require("redflat.gauge.separator")
 
 -- Initialize tables for module
 -----------------------------------------------------------------------------------------------------------------------
@@ -125,7 +124,7 @@ local function build_markup(cheatsheet, style, query)
 			-- add various commands
 			for _, value in ipairs(group) do
 				local line = string.format("<span font='%s'>%s</span>", style.keyfont, awful.util.escape(value.cmd))
-				
+
 				-- align keys
 				line = line .. string.rep(" ", max_cmd - value.cmd:len())
 
@@ -192,7 +191,7 @@ function cs_viewer:init()
 		layout = wibox.container.margin,
 	})
 
-	self.keygrabber = function(mod, key, event)
+	self.keygrabber = function(_, key, event)
 		if event == "release" then
 			if hasitem(self.keys.close, key) then
 				self:hide(); return
@@ -248,7 +247,6 @@ function cs_viewer:show(cheatsheet)
 
 	-- set geometry
 	local tw, th = self.title:get_preferred_size()
-	local tbw, tbh = self.textbox:get_preferred_size()
 	local bm = self.style.border_margin
 	self.wibox:geometry({
 		width = math.max(tw, self.parsed_cs.width) + bm[1] + bm[2],

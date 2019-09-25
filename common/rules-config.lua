@@ -6,9 +6,6 @@
 local awful = require("awful")
 local beautiful = require("beautiful")
 
-local redtitle = require("redflat.titlebar")
-
-local appnames = require("common.alias-config")
 local env = require("common.env-config")
 local lay_tabbed = require("user.layout.tabbed")
 
@@ -163,7 +160,7 @@ end
 
 -- Create key from props table
 --------------------------------------------------------------------------------
-local function create_nn_key(env, props)
+local function create_nn_key(mod, props)
 	-- function called when key is pressed
 	local function toggle()
 		local t = awful.screen.focused().selected_tag
@@ -172,7 +169,6 @@ local function create_nn_key(env, props)
 			awful.tag.history.restore()
 		else
 			-- find if app is alredy open
-			local ar = awful.rules
 			for _, c in ipairs(props.tag:clients()) do
 				if awful.rules.matches(c, props) then
 					c:raise()
@@ -187,7 +183,7 @@ local function create_nn_key(env, props)
 
 	-- create key
 	local key = {
-		{ env.mod }, props.key, toggle,
+		{ mod }, props.key, toggle,
 		{ description = props.desc, group = "Non Numeric Tags" }
 	}
 
@@ -198,7 +194,7 @@ end
 -----------------------------------------------------------------------------------------------------------------------
 function rules:init(args)
 
-	local args = args or {}
+	args = args or {}
 	self.base_properties.keys = args.hotkeys.keys.client
 	self.base_properties.buttons = args.hotkeys.mouse.client
 
@@ -280,7 +276,7 @@ function rules:init(args)
 			type = "dialog",
 		},
 		properties = {
-			callback = function(client, rules)
+			callback = function(client)
 				if (client.width == 589 and client.height == 190) or
 				   (client.width == 457 and client.height == 172) then
 					client:kill()
@@ -312,7 +308,7 @@ end
 
 -- Tag setup
 -----------------------------------------------------------------------------------------------------------------------
-function rules:tag_setup(screen, skip_nn)
+function rules:tag_setup(screen)
 	-- create named tags
 	for _, v in ipairs(self.named_tags) do
 		create_tag(v, screen)
@@ -340,11 +336,11 @@ end
 
 -- Get table of keys to toggle non numeric tags
 -----------------------------------------------------------------------------------------------------------------------
-function rules:get_nn_keys(env)
+function rules:get_nn_keys(mod)
 	local keys = {}
 
 	for _, v in ipairs(self.nn_tags) do
-		table.insert(keys, create_nn_key(env, v))
+		table.insert(keys, create_nn_key(mod, v))
 	end
 
 	return keys

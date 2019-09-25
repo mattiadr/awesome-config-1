@@ -14,7 +14,7 @@ local inspect = require("user.util.inspect")
 -----------------------------------------------------------------------------------------------------------------------
 local debugger = { cmd_path = gfs.get_cache_dir() .. "debugger_cmd.lua" }
 
-function context_to_text(context)
+local function context_to_text(context)
 	-- skip metatable
 	local process = function(item)
 		if item ~= getmetatable(context) then return item end
@@ -24,7 +24,7 @@ end
 
 -- Create text box with border and callback
 --------------------------------------------------------------------------------
-function create_button(name, callback)
+local function create_button(name, callback)
 	local tb = wibox.widget.textbox(" " .. name .. " ")
 	tb:buttons(awful.button({}, 1, callback))
 	local ma = wibox.container.margin(tb, 2, 2, 2, 2, "#aaaaaa")
@@ -73,7 +73,7 @@ function debugger:init()
 	-- title widget
 	local title = wibox.widget.textbox("Debugger")
 	title:set_align("center")
-	local tw, th = title:get_preferred_size()
+	local _, th = title:get_preferred_size()
 
 	-- logger widget
 	self.logger = { len = 0 }
@@ -127,7 +127,7 @@ end
 function debugger:show()
 	-- init debugger
 	if not self.wibox then
-		self:init(sub)
+		self:init()
 	end
 
 	self.wibox.visible = true
@@ -138,7 +138,7 @@ end
 function debugger:hide()
 	-- init debugger
 	if not self.wibox then
-		self:init(sub)
+		self:init()
 	end
 
 	self.wibox.visible = false
@@ -149,7 +149,7 @@ end
 function debugger:toggle()
 	-- init debugger
 	if not self.wibox then
-		self:init(sub)
+		self:init()
 	end
 
 	if self.wibox.visible then

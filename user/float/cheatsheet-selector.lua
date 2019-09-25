@@ -144,7 +144,7 @@ local function construct_item(style)
 	-- Item methods
 	------------------------------------------------------------
 	function item:set(cs)
-		local cs = cs or {}
+		cs = cs or {}
 
 		local name_text = awful.util.escape(cs.name) or ""
 		self.name:set_markup(name_text)
@@ -220,7 +220,7 @@ end
 -- Sort function
 --------------------------------------------------------------------------------
 local function sort_by_query(t, query)
-	l = query:len()
+	local l = query:len()
 
 	local function starts(e)
 		return e.name:sub(1, l):lower() == query
@@ -244,7 +244,7 @@ local function list_filtrate(query)
 	if lastquery ~= query then
 		cheatsheets.current = {}
 
-		for i, c in ipairs(cheatsheets.all) do
+		for _, c in ipairs(cheatsheets.all) do
 			if c.name:lower():match(query) then
 				table.insert(cheatsheets.current, c)
 			end
@@ -281,7 +281,7 @@ end
 
 -- Keypress handler
 -----------------------------------------------------------------------------------------------------------------------
-local function keypressed_callback(mod, key, comm)
+local function keypressed_callback(mod, key)
 	for _, k in ipairs(cs_selector.keys.all) do
 		if redutil.key.match_prompt(k, mod, key) then k[3](); return true end
 	end
@@ -297,7 +297,7 @@ function cs_selector:init()
 	local style = default_style()
 	self.itemnum = style.itemnum
 	self.keytip = style.keytip
-	
+
 	-- get full cheatsheet list
 	cheatsheets.all = parse_all_files(style.location)
 	cheatsheets.current = awful.util.table.clone(cheatsheets.all)
@@ -374,7 +374,7 @@ end
 -- Set user hotkeys
 -----------------------------------------------------------------------------------------------------------------------
 function cs_selector:set_keys(keys, layout)
-	local layout = layout or "all"
+	layout = layout or "all"
 	if keys then
 		self.keys[layout] = keys
 		if layout ~= "all" then

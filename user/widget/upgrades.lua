@@ -44,13 +44,13 @@ function upgrades.new(pacmans, args, style)
 	-- Initialize vars
 	--------------------------------------------------------------------------------
 	local object = {}
-	local pacmans = pacmans or {}
-	local args = args or {}
+	pacmans = pacmans or {}
+	args = args or {}
 	local terminal = args.terminal or nil
 	local update_timeout = args.update_timeout or 3600
 	local spawn_cmd = [[%s -e bash -c "echo '%s' && %s && echo Done! && read"]]
 
-	local style = redutil.table.merge(default_style(), style or {})
+	style = redutil.table.merge(default_style(), style or {})
 
 	object.widget = svgbox(style.icon)
 	object.widget:set_color(style.color.icon)
@@ -100,7 +100,7 @@ function upgrades.new(pacmans, args, style)
 
 	-- Callback to check exit code and output
 	--------------------------------------------------------------------------------
-	local function check_callback(pm, stdout, stderr, _, exitcode)
+	local function check_callback(pm, stdout, _, _, exitcode)
 		if exitcode == 0 then
 			local c = string.match(stdout, "(%d+)")
 			pm.count = tonumber(c)

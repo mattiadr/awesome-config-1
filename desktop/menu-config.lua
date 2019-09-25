@@ -5,7 +5,6 @@
 -- Grab environment
 local beautiful = require("beautiful")
 local awful = require("awful")
-local naughty = require("naughty")
 
 local redflat = require("redflat")
 
@@ -20,7 +19,7 @@ local menu = {}
 function menu:init(args)
 
 	-- vars
-	local args = args or {}
+	args = args or {}
 	local env = args.env or {} -- fix this?
 	local separator = args.separator or { widget = redflat.gauge.separator.horizontal() }
 	local theme = args.theme or { auto_hotkey = true }

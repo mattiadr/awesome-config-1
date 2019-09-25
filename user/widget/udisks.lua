@@ -41,7 +41,7 @@ local function mount_device(device)
 	if device.Mounted then
 		open_filemanger(device);
 	else
-		ret, err = system_bus:call(
+		system_bus:call(
 			'org.freedesktop.UDisks2',
 			'/org/freedesktop/UDisks2/block_devices/' .. device.Device,
 			'org.freedesktop.UDisks2.Filesystem',
@@ -53,7 +53,7 @@ local function mount_device(device)
 			Gio.DBusConnectionFlags.NONE,
 			-1,
 			nil,
-			function(conn, res)
+			function(_, res)
 				local ret, err = system_bus:call_finish(res);
 				if err then
 					naughty.notify({
@@ -73,7 +73,7 @@ end
 
 local function unmount_device(device)
 	if device.Mounted then
-		ret, err = system_bus:call(
+		system_bus:call(
 			'org.freedesktop.UDisks2',
 			'/org/freedesktop/UDisks2/block_devices/' .. device.Device,
 			'org.freedesktop.UDisks2.Filesystem',
@@ -85,8 +85,8 @@ local function unmount_device(device)
 			Gio.DBusConnectionFlags.NONE,
 			-1,
 			nil,
-			function(conn, res)
-				local ret, err = system_bus:call_finish(res);
+			function(_, res)
+				local _, err = system_bus:call_finish(res);
 				if err then
 					naughty.notify({
 						preset = naughty.config.presets.critical,
@@ -99,7 +99,7 @@ local function unmount_device(device)
 end
 
 
-local function parse_block_devices(conn, res, callback)
+local function parse_block_devices(_, res, callback)
 	local ret, err = system_bus:call_finish(res);
 	local xml = ret.value[1];
 
@@ -122,11 +122,11 @@ local function parse_block_devices(conn, res, callback)
 		Gio.DBusConnectionFlags.NONE,
 		-1,
 		nil,
-		function(conn, res)
-			local ret, err = system_bus:call_finish(res);
-			local value = ret.value[1];
-			if err then
-				print(err)
+		function(_, res2)
+			local ret2, err2 = system_bus:call_finish(res2);
+			local value = ret2.value[1];
+			if err2 then
+				print(err2)
 				callback(devices);
 				return
 			end
@@ -185,26 +185,28 @@ local function rescan_devices(callback)
 end
 
 
-local function scan_finished(devices)
+local function scan_finished(dev)
 	devices_layout:reset();
-	for device, data in pairs(devices) do
+	for _, data in pairs(dev) do
 		if data.Removable and data.OK then
 			local bus_type = data.ConnectionBus;
 			local status = 'unmounted';
-			local icon_name = '';
+
 			if data.Mounted then
 				status = 'mounted';
 			end
+
 			if not bus_type then
 				bus_type = 'default';
 			end
-			icon_name = 'removable_' .. bus_type .. '_' .. status;
+
+			local icon_name = 'removable_' .. bus_type .. '_' .. status;
 			if beautiful.icon.widget.udisks[icon_name] == nil then
 				bus_type = 'default'
 				icon_name = 'removable_' .. bus_type .. '_' .. status;
 			end
 
-			deviceicon = wibox.widget.imagebox();
+			local deviceicon = wibox.widget.imagebox();
 			deviceicon:set_image(beautiful.icon.widget.udisks[icon_name]);
 			deviceicon:buttons(awful.util.table.join(
 				awful.button({ }, 1, function () mount_device(data); end),
@@ -224,7 +226,7 @@ if capi.dbus then
 	capi.dbus.add_match("system", "interface='org.freedesktop.DBus.ObjectManager', member='InterfacesAdded'")
 	capi.dbus.add_match("system", "interface='org.freedesktop.DBus.ObjectManager', member='InterfacesRemoved'")
 	capi.dbus.connect_signal("org.freedesktop.DBus.ObjectManager",
-		function (data, text)
+		function (data, _)
 			if data.path == "/org/freedesktop/UDisks2" then
 				rescan_devices(scan_finished);
 			end

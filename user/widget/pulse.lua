@@ -6,14 +6,12 @@
 
 -- Grab environment
 -----------------------------------------------------------------------------------------------------------------------
-local io = io
 local math = math
 local table = table
 local tonumber = tonumber
 local tostring = tostring
 local string = string
 local setmetatable = setmetatable
-local wibox = require("wibox")
 local awful = require("awful")
 local naughty = require("naughty")
 local beautiful = require("beautiful")
@@ -78,11 +76,6 @@ function pulse:choose_sink()
 	-- menu items
 	local items = {}
 
-	-- icon finder
-	local function micon(name)
-		return redflat.service.dfparser.lookup_icon(name, {})
-	end
-
 	-- get sink names
 	local def_sink = redutil.read.output("pacmd dump | perl -ane 'print $F[1] if /set-default-sink/'")
 	for s in redutil.read.output("pacmd list-sinks | grep -Po '(?<=name: <)\\S+(?=>)'"):gmatch("[^\n]+") do
@@ -127,7 +120,7 @@ end
 function pulse:change_volume(args)
 
 	-- initialize vars
-	local args = redutil.table.merge(change_volume_default_args, args or {})
+	args = redutil.table.merge(change_volume_default_args, args or {})
 	local diff = args.down and -args.step or args.step
 
 	-- get current sink
@@ -170,6 +163,7 @@ function pulse:mute(forced)
 	-- get current mute state
 	local mute = redutil.read.output("pacmd dump | grep set-sink-mute | grep " .. sink)
 
+	local b
 	if forced ~= nil then
 		b = forced
 	else
@@ -236,21 +230,20 @@ function pulse.new(args, style)
 
 	-- Initialize vars
 	--------------------------------------------------------------------------------
-	local style = redutil.table.merge(default_style(), style or {})
+	style = redutil.table.merge(default_style(), style or {})
 	pulse.notify = style.notify
 	pulse.retry = style.retry
 
-	local args = args or {}
+	args = args or {}
 	local timeout = args.timeout or 5
 	local autoupdate = args.autoupdate or false
-	local menu_theme = args.menu_theme or { auto_hotkey = true }
 
 	pulse.sink_names = args.sink_names or {}
 	pulse.check_icon = style.check_icon
 
 	-- create widget
 	--------------------------------------------------------------------------------
-	widg = style.widget(style.audio)
+	local widg = style.widget(style.audio)
 	table.insert(pulse.widgets, widg)
 
 	-- Set tooltip
@@ -271,7 +264,7 @@ function pulse.new(args, style)
 
 	-- Create menu
 	if not pulse.sink_selector then
-		pulse.sink_selector = redmenu({ theme = theme, items = {} })
+		pulse.sink_selector = redmenu({ theme = args.menu_theme, items = {} })
 	end
 
 	--------------------------------------------------------------------------------

@@ -218,7 +218,7 @@ local function arrange(data, param)
 
 	-- update geometries to correct gap
 	local gap_diff = useless_gap - old_gap
-	for c, g in pairs(param.geometries) do
+	for _, g in pairs(param.geometries) do
 		g.width = g.width - gap_diff * 2
 		g.height = g.height - gap_diff * 2
 		g.x = g.x + gap_diff
@@ -229,7 +229,7 @@ end
 function tabbed:new(layout, master_rules, minor_rules)
 	-- init new layout table
 	local lay = { data = {} }
-	
+
 	-- set properties in data
 	lay.data.layout = layout
 	lay.data.managed_clients = {}
@@ -237,7 +237,7 @@ function tabbed:new(layout, master_rules, minor_rules)
 		master = master_rules,
 		minor = minor_rules,
 	}
-	
+
 	-- create first tab
 	local tab = { clients = {} }
 	tab.next = tab
@@ -248,12 +248,12 @@ function tabbed:new(layout, master_rules, minor_rules)
 	-- set layout attributes
 	lay.key_handler = laycommon.handler[layout]
 	lay.tip = laycommon.tips[layout]
-	
+
 	-- set layout arrange function
 	function lay.arrange(param)
 		return arrange(lay.data, param)
 	end
-	
+
 	-- set layout mouse resize function
 	function lay.mouse_resize_handler(...)
 		return lay.data.layout.mouse_resize_handler(...)
@@ -263,8 +263,8 @@ function tabbed:new(layout, master_rules, minor_rules)
 	function lay:get_state(selected)
 		local states = {}
 
-		for tab in tab_iterator(self.data.first_tab) do
-			table.insert(states, { focus = (tab == self.data.curr_tab and selected) })
+		for t in tab_iterator(self.data.first_tab) do
+			table.insert(states, { focus = (t == self.data.curr_tab and selected) })
 		end
 
 		return states
@@ -319,7 +319,7 @@ function tabbed:new(layout, master_rules, minor_rules)
 		end
 	end
 
-	client.connect_signal("untagged", function(c, t)
+	client.connect_signal("untagged", function(c, _)
 		remove_client(lay.data, nil, c)
 	end)
 

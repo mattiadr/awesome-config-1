@@ -3,13 +3,12 @@
 ------------------------------------------------------------------------------------------------------------------------
 
 local awful = require("awful")
-local gears = require("gears")
 local wibox = require("wibox")
 local naughty = require("naughty")
 
 local tooltip = require("redflat.float.tooltip")
 
-local timer = gears.timer or timer
+local timer = require("gears.timer")
 local watch = awful.spawn and awful.spawn.with_line_callback
 
 ------------------------------------------
@@ -91,7 +90,7 @@ function battery_widget:new(args)
 	end
 	-- creates an empty container wibox, which can be added to your panel even if its empty
 	local batteries = { layout = wibox.layout.fixed.horizontal }
-	for i, adapter in ipairs(self:discover()) do
+	for _, adapter in ipairs(self:discover()) do
 		local _args = setmetatable({adapter = adapter}, {__index = args})
 		table.insert(batteries, self(_args).widget)
 	end
@@ -145,7 +144,7 @@ function battery_widget:init(args)
 
 	if (args.listen or args.listen == nil) and watch then
 		self.listener = watch("acpi_listen", {
-			stdout = function(line) self:update() end,
+			stdout = function(_) self:update() end,
 		})
 		awesome.connect_signal("exit", function()
 			awesome.kill(self.listener, awesome.unix_signal.SIGTERM)
@@ -206,7 +205,7 @@ function battery_widget:update()
 	ctx.color_on = ""
 	ctx.color_off = ""
 	if ctx.percent then
-		for k, v in ipairs(self.limits) do
+		for _, v in ipairs(self.limits) do
 			if ctx.percent <= v[1] then
 				ctx.color_on, ctx.color_off = color_tags(v[2])
 				break

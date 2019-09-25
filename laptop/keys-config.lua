@@ -6,7 +6,6 @@
 local table = table
 
 local awful = require("awful")
-local beautiful = require("beautiful")
 
 local redflat = require("redflat")
 local user = require("user")
@@ -21,13 +20,11 @@ local hotkeys = { mouse = {}, raw = {}, keys = {}, fake = {} }
 local apprunner = redflat.float.apprunner
 --local appswitcher = redflat.float.appswitcher
 local current = redflat.widget.tasklist.filter.currenttags
-local allscr = redflat.widget.tasklist.filter.allscreen
 local laybox = redflat.widget.layoutbox
 local redtip = redflat.float.hotkeys
 local laycom = redflat.layout.common
 local grid = redflat.layout.grid
 local map = redflat.layout.map
-local redtitle = redflat.titlebar
 local qlaunch = redflat.float.qlaunch
 
 local cheatsheet = user.float["cheatsheet-selector"]
@@ -179,7 +176,8 @@ local function toggle_hor_scroll()
 			if not line:find("libinput Horizontal Scroll Enabled") then return end
 
 			local m = line:match("0$")
-			awful.spawn('xinput set-prop "AlpsPS/2 ALPS DualPoint TouchPad" "libinput Horizontal Scroll Enabled" ' .. (m and "1" or "0"))
+			awful.spawn('xinput set-prop "AlpsPS/2 ALPS DualPoint TouchPad" "libinput Horizontal Scroll Enabled" '
+				.. (m and "1" or "0"))
 			awful.spawn('notify-send "Horizontal scroll ' .. (m and "Enabled" or "Disabled") .. '"')
 		end
 	})
@@ -212,7 +210,7 @@ end
 function hotkeys:init(args)
 
 	-- Init vars
-	local args = args or {}
+	args = args or {}
 	local env = args.env
 	local mainmenu = args.menu
 	local powermenu = args.powermenu
@@ -885,7 +883,7 @@ function hotkeys:init(args)
 
 	-- Non numeric tag keys
 	--------------------------------------------------------------------------------
-	self.raw.nn_keys = rules:get_nn_keys(env)
+	self.raw.nn_keys = rules:get_nn_keys(env.mod)
 	self.raw.root = awful.util.table.join(self.raw.root, self.raw.nn_keys)
 
 	-- Client keys

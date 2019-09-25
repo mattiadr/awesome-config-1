@@ -173,13 +173,25 @@ awful.screen.connect_for_each_screen(
 		layoutbox[s] = redflat.widget.layoutbox({ screen = s })
 
 		-- taglist widget
-		taglist[s] = redflat.widget.taglist({ screen = s, filter = redflat.widget.taglist.filter.noempty, hint = env.tagtip, buttons = taglist.buttons }, taglist.style)
+		taglist[s] = redflat.widget.taglist({
+			screen = s,
+			filter = redflat.widget.taglist.filter.noempty,
+			hint = env.tagtip,
+			buttons = taglist.buttons,
+		}, taglist.style)
 
 		-- tasklist widget
-		tasklist[s] = redflat.widget.tasklist({ screen = s, buttons = tasklist.buttons }, tasklist.style)
+		tasklist[s] = redflat.widget.tasklist({
+			screen = s,
+			buttons = tasklist.buttons,
+		}, tasklist.style)
 
 		-- panel wibox
-		s.panel = awful.wibar({ position = "bottom", screen = s, height = beautiful.panel_height or 36 })
+		s.panel = awful.wibar({
+			position = "bottom",
+			screen = s,
+			height = beautiful.panel_height or 36,
+		})
 
 		-- add widgets to the wibox
 		s.panel:setup({

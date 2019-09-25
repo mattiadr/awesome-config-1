@@ -2,7 +2,7 @@
 --                                      Application aliases for tasklist widget                                      --
 -----------------------------------------------------------------------------------------------------------------------
 
-appnames = {}
+local appnames = {}
 
 appnames["Chromium"]             = "Chrome"
 appnames["Evince"]               = "Evince"
