@@ -11,7 +11,7 @@ local beautiful = require("beautiful")
 local redflat = require("redflat")
 local user = require("user")
 
-local rules = require("configs.rules-config")
+local rules = require("common.rules-config")
 
 -- Initialize tables and vars for module
 -----------------------------------------------------------------------------------------------------------------------
@@ -783,6 +783,10 @@ function hotkeys:init(args)
 		},
 
 		{
+			{}, "XF86TouchpadToggle", toggle_hor_scroll,
+			{ description = "Toggle horizontal scroll", group = "Misc" }
+		},
+		{
 			{}, "Print", function() scrot(false) end,
 			{ description = "scrot selection to clipboard", group = "Misc" }
 		},
@@ -793,10 +797,6 @@ function hotkeys:init(args)
 		{
 			{ env.mod, "Control" }, "s", function() for s in screen do env.wallpaper(s) end end,
 			{ description = "Refresh Wallpaper", group = "Misc" }
-		},
-		{
-			{ env.mod }, "BackSpace", function() powermenu:show() end,
-			{ description = "Show Power Menu", group = "Misc" }
 		},
 
 		{
@@ -860,8 +860,25 @@ function hotkeys:init(args)
 			{}, "XF86AudioMute", volume_mute,
 			{} -- hidden key
 		},
+
 		{
-			{}, "XF86Tools", function() awful.spawn("qalculate-gtk") end,
+			{}, "XF86MonBrightnessUp", function() brightness({ step = 5 }) end,
+			{} -- hidden key
+		},
+		{
+			{}, "XF86MonBrightnessDown", function() brightness({ step = 5, down = true }) end,
+			{} -- hidden key
+		},
+		{
+			{}, "XF86Calculator", function() awful.spawn("qalculate-gtk") end,
+			{} -- hidden key
+		},
+		{
+			{}, "XF86Sleep", function() lock_screen(); awful.spawn("systemctl suspend") end,
+			{} -- hidden key
+		},
+		{
+			{}, "XF86PowerOff", function() powermenu:show() end,
 			{} -- hidden key
 		},
 	}

@@ -8,8 +8,8 @@ local beautiful = require("beautiful")
 
 local redtitle = require("redflat.titlebar")
 
-local appnames = require("configs.alias-config")
-local env = require("configs.env-config")
+local appnames = require("common.alias-config")
+local env = require("common.env-config")
 local lay_tabbed = require("user.layout.tabbed")
 
 -- Initialize tables and vars for module
@@ -26,6 +26,7 @@ rules.floating_any = {
 		"dialog"
 	},
 	class = {
+		"Nm-connection-editor",
 		"Pavucontrol",
 		"Qalculate-gtk",
 	},
