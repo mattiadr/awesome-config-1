@@ -238,13 +238,12 @@ theme.service.dfparser = {
 	},
 	dir_override = true,
 	icons = {
-		df_icon       = theme.homedir .. "/.icons/ACYLS/scalable/mimetypes/application-x-executable.svg",
-		theme         = theme.homedir .. "/.icons/ACYLS",
+		df_icon       = "/usr/share/icons/ACYLS/scalable/mimetypes/application-x-executable.svg",
+		theme         = "/usr/share/icons/ACYLS",
 		custom_only   = true,
 		scalable_only = true
 	}
 }
-
 
 -- Menu config
 -----------------------------------------------------------------------------------------------------------------------
