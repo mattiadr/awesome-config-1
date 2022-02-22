@@ -9,6 +9,8 @@
 -----------------------------------------------------------------------------------------------------------------------
 local setmetatable = setmetatable
 local os = os
+local table = table
+local unpack = table.unpack
 
 local awful = require("awful")
 local wibox = require("wibox")
